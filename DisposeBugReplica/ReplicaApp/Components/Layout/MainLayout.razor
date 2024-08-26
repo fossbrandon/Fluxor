@@ -1,4 +1,9 @@
-﻿@inherits LayoutComponentBase
+﻿@inherits FluxorLayout
+@inject IState<CounterState> CounterState
+@inject IDispatcher Dispatcher
+@using Fluxor
+@using Fluxor.Blazor.Web.Components
+@using Store.CounterUseCase
 
 <Fluxor.Blazor.Web.StoreInitializer />
 
@@ -9,6 +14,7 @@
 
     <main>
         <div class="top-row px-4">
+            <p>Count: @CounterState.Value.ClickCount</p>
             <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
         </div>
 
@@ -17,3 +23,13 @@
         </article>
     </main>
 </div>
+
+@code {
+    /// <inheritdoc />
+    protected override void OnInitialized()
+    {
+        // Subscribes to state properties.
+        base.OnInitialized();
+    }
+
+}

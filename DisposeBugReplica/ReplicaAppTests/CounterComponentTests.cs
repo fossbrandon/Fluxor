@@ -1,31 +1,47 @@
-namespace ReplicaAppTests
+using Fluxor;
+using ReplicaApp;
+using ReplicaApp.Components.Layout;
+using ReplicaApp.Components.Pages;
+
+namespace ReplicaAppTests;
+
+/// <summary>
+/// Unit tests for the <see cref="Counter"/> component.
+/// </summary>
+public class CounterComponentTests : TestContext
 {
-    /// <summary>
-    /// Unit tests for the <see cref="Counter"/> component.
-    /// </summary>
-    public class CounterComponentTests : TestContext
+    [Fact]
+    public void CounterStartsAtZero()
     {
-        [Fact]
-        public void CounterStartsAtZero()
-        {
-            // Arrange
-            var cut = RenderComponent<Counter>();
+        // Arrange
+        // Add Fluxor dependencies.
+        Services.AddFluxor(options => options
+            .ScanAssemblies(typeof(MauiProgram).Assembly)
+            .WithLifetime(StoreLifetime.Singleton));
 
-            // Assert that content of the paragraph shows counter at zero
-            cut.Find("p").MarkupMatches("<p>Current count: 0</p>");
-        }
+        // Act
+        RenderComponent<MainLayout>();
+        var cut = RenderComponent<Counter>();
 
-        [Fact]
-        public void ClickingButtonIncrementsCounter()
-        {
-            // Arrange
-            var cut = RenderComponent<Counter>();
+        // Assert
+        cut.Find("p").MarkupMatches("<p role=\"status\">Current count: 0</p>");
+    }
 
-            // Act - click button to increment counter
-            cut.Find("button").Click();
+    [Fact]
+    public void ClickingButtonIncrementsCounter()
+    {
+        // Arrange
+        // Add Fluxor dependencies.
+        Services.AddFluxor(options => options
+            .ScanAssemblies(typeof(MauiProgram).Assembly)
+            .WithLifetime(StoreLifetime.Singleton));
 
-            // Assert that the counter was incremented
-            cut.Find("p").MarkupMatches("<p>Current count: 1</p>");
-        }
+        // Act
+        RenderComponent<MainLayout>();
+        var cut = RenderComponent<Counter>();
+        cut.Find("button").Click();
+
+        // Assert
+        cut.Find("p").MarkupMatches("<p role=\"status\">Current count: 1</p>");
     }
 }
